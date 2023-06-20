@@ -14,3 +14,5 @@ mj:
     timeout-minutes: 5
     core-size: 3
     queue-size: 10
+  openai:
+    gpt-api-key: xxx
