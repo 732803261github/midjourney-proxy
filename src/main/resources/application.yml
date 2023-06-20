@@ -17,5 +17,5 @@ mj:
   openai:
     gpt-api-key: xxx
   proxy:
-    host: 127.0.0.1
+    host: 43.130.230.251
     port: 1090
