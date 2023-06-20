@@ -16,3 +16,6 @@ mj:
     queue-size: 10
   openai:
     gpt-api-key: xxx
+  proxy:
+    host: 127.0.0.1
+    port: 1090
