@@ -11,7 +11,7 @@ knife4j:
   openapi:
     title: Midjourney Proxy API文档
     description: 代理 MidJourney 的discord频道，实现api形式调用AI绘图
-    concat: novicezk
+    concat: chenxiaoming
     url: https://github.com/novicezk/midjourney-proxy
     version: v2.1.6
     terms-of-service-url: https://github.com/novicezk/midjourney-proxy

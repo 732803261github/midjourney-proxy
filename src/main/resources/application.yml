@@ -3,13 +3,13 @@ mj:
     guild-id: xxx
     channel-id: xxx
     user-token: xxx
-    user-wss: false
-    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
-    bot-token: xxx
+    user-wss: true
+    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36
+    bot-token: null
   task-store:
     type: in_memory
     timeout: 30d
-  translate-way: null
+  translate-way: GPT
   queue:
     timeout-minutes: 5
     core-size: 3
