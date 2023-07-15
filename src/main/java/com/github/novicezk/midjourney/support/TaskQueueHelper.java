@@ -34,6 +34,8 @@ public class TaskQueueHelper {
 	@Resource
 	private NotifyService notifyService;
 
+	private static final String KEY_PREFIX = "task-finish::";
+
 	private final int timeoutMinutes;
 	private final ThreadPoolTaskExecutor taskExecutor;
 	private final ThreadPoolTaskExecutor waitFutureExecutor;
@@ -120,7 +122,7 @@ public class TaskQueueHelper {
 		} finally {
 			this.runningTasks.remove(task);
 			this.taskFutureMap.remove(task.getId());
-			this.taskStoreService.delete(task.getId());
+			this.taskStoreService.set(this.KEY_PREFIX+task.getId());
 		}
 	}
 

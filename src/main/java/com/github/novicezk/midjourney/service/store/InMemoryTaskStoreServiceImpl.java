@@ -21,6 +21,11 @@ public class InMemoryTaskStoreServiceImpl implements TaskStoreService {
 	}
 
 	@Override
+	public void set(String key) {
+
+	}
+
+	@Override
 	public void save(Task task) {
 		this.taskMap.put(task.getId(), task);
 	}

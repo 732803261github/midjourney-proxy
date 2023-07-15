@@ -28,6 +28,11 @@ public class RedisTaskStoreServiceImpl implements TaskStoreService {
 	}
 
 	@Override
+	public void set(String key) {
+		this.redisTemplate.opsForValue().set(getRedisKey(key), null, this.timeout);
+	}
+
+	@Override
 	public void save(Task task) {
 		this.redisTemplate.opsForValue().set(getRedisKey(task.getId()), task, this.timeout);
 	}

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TaskStoreService {
 
+	void set (String key);
+
 	void save(Task task);
 
 	void delete(String id);
