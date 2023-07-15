@@ -113,6 +113,7 @@ public class TaskQueueHelper {
 				changeStatusAndNotify(task, task.getStatus());
 			} while (task.getStatus() == TaskStatus.IN_PROGRESS);
 			log.debug("task finished, id: {}, status: {}", task.getId(), task.getStatus());
+			this.taskStoreService.set(KEY_PREFIX+task.getId());
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (Exception e) {
@@ -122,7 +123,6 @@ public class TaskQueueHelper {
 		} finally {
 			this.runningTasks.remove(task);
 			this.taskFutureMap.remove(task.getId());
-			this.taskStoreService.set(this.KEY_PREFIX+task.getId());
 		}
 	}
 
