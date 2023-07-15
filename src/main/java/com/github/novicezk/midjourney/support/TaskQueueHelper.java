@@ -75,6 +75,7 @@ public class TaskQueueHelper {
 	}
 
 	public SubmitResultVO submitTask(Task task, Callable<Message<Void>> discordSubmit) {
+		log.info("task:{}",task);
 		this.taskStoreService.save(task);
 		int size;
 		try {
