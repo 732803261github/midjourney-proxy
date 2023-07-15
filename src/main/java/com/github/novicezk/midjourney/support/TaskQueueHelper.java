@@ -111,6 +111,8 @@ public class TaskQueueHelper {
 				changeStatusAndNotify(task, task.getStatus());
 			} while (task.getStatus() == TaskStatus.IN_PROGRESS);
 			log.debug("task finished, id: {}, status: {}", task.getId(), task.getStatus());
+			//删除redis
+			this.taskStoreService.delete(task.getId());
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (Exception e) {
