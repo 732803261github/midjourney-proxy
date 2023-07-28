@@ -52,7 +52,6 @@ public class BeanConfig {
 		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 		redisTemplate.setConnectionFactory(redisConnectionFactory);
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
 		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 		return redisTemplate;
 	}
