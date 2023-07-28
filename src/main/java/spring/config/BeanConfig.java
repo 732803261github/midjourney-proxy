@@ -51,10 +51,9 @@ public class BeanConfig {
 		RedisTemplate<String, Task> redisTemplate = new RedisTemplate<>();
 		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 		redisTemplate.setConnectionFactory(redisConnectionFactory);
-//		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setKeySerializer(jackson2JsonRedisSerializer);
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-		redisTemplate.setHashKeySerializer(jackson2JsonRedisSerializer);
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 		return redisTemplate;
 	}
 
