@@ -34,7 +34,7 @@ public class TaskQueueHelper {
 	@Resource
 	private NotifyService notifyService;
 
-	private static final String KEY_PREFIX = "task-finish::";
+	private static final String KEY_PREFIX = "taskdone-";
 
 	private final int timeoutMinutes;
 	private final ThreadPoolTaskExecutor taskExecutor;
