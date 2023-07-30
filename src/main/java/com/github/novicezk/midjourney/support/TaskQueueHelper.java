@@ -9,6 +9,9 @@ import com.github.novicezk.midjourney.result.SubmitResultVO;
 import com.github.novicezk.midjourney.service.NotifyService;
 import com.github.novicezk.midjourney.service.TaskStoreService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +36,9 @@ public class TaskQueueHelper {
 	private TaskStoreService taskStoreService;
 	@Resource
 	private NotifyService notifyService;
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
 	private static final String KEY_PREFIX = "taskdone-";
 
@@ -114,6 +120,8 @@ public class TaskQueueHelper {
 				changeStatusAndNotify(task, task.getStatus());
 			} while (task.getStatus() == TaskStatus.IN_PROGRESS);
 			log.debug("task finished, id: {}, status: {}", task.getId(), task.getStatus());
+			//删除缓存
+			stringRedisTemplate.delete("taskdone-".concat(task.getId()));
 			this.taskStoreService.set(KEY_PREFIX+task.getId());
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
