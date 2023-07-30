@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,8 +92,7 @@ public class SubmitController {
 		task.setPromptEn(promptEn);
 		task.setFinalPrompt("[" + task.getId() + "] " + promptEn);
 		task.setDescription("/imagine " + imagineDTO.getPrompt());
-		String key = task.getId().split("-")[1].concat("-").concat(imagineDTO.getOpenid());
-		redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
+		openidBindTask(task, imagineDTO.getOpenid());
 		return this.taskService.submitImagine(task, dataUrl);
 	}
 
@@ -152,16 +152,22 @@ public class SubmitController {
 		task.setRelatedTaskId(ConvertUtils.findTaskIdByFinalPrompt(targetTask.getFinalPrompt()));
 		task.setDescription(description);
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
-			String key = task.getId().split("-")[1].concat("-").concat(changeDTO.getOpenid());
-			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
+			openidBindTask(task, changeDTO.getOpenid());
 			return this.taskService.submitUpscale(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
-			String key = task.getId().split("-")[1].concat("-").concat(changeDTO.getOpenid());
-			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
+			openidBindTask(task, changeDTO.getOpenid());
 			return this.taskService.submitVariation(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "不支持的操作: " + changeDTO.getAction());
 		}
+	}
+
+	public  void openidBindTask(Task task,String openid){
+		String key = task.getId().concat("-").concat(openid);
+		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+		redisTemplate.setKeySerializer(jackson2JsonRedisSerializer);
+		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+		redisTemplate.opsForValue().set(key,"",30,TimeUnit.DAYS);
 	}
 
 	@ApiOperation(value = "提交Describe任务")
