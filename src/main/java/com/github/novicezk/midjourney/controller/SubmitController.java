@@ -150,8 +150,12 @@ public class SubmitController {
 		task.setRelatedTaskId(ConvertUtils.findTaskIdByFinalPrompt(targetTask.getFinalPrompt()));
 		task.setDescription(description);
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
+			String key = task.getId().concat("-").concat(changeDTO.getOpenid());
+			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 			return this.taskService.submitUpscale(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
+			String key = task.getId().concat("-").concat(changeDTO.getOpenid());
+			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 			return this.taskService.submitVariation(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "不支持的操作: " + changeDTO.getAction());
