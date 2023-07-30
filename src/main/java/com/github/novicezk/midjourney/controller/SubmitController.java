@@ -2,6 +2,8 @@ package com.github.novicezk.midjourney.controller;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.RandomUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.novicezk.midjourney.ProxyProperties;
 import com.github.novicezk.midjourney.ReturnCode;
 import com.github.novicezk.midjourney.dto.BaseSubmitDTO;
@@ -56,7 +58,7 @@ public class SubmitController {
 
 	@ApiOperation(value = "提交Imagine任务")
 	@PostMapping("/imagine")
-	public SubmitResultVO imagine(@RequestBody SubmitImagineDTO imagineDTO) {
+	public SubmitResultVO imagine(@RequestBody SubmitImagineDTO imagineDTO) throws JsonProcessingException {
 		String prompt = imagineDTO.getPrompt();
 		if (CharSequenceUtil.isBlank(prompt)) {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "prompt不能为空");
@@ -89,7 +91,9 @@ public class SubmitController {
 		task.setPromptEn(promptEn);
 		task.setFinalPrompt("[" + task.getId() + "] " + promptEn);
 		task.setDescription("/imagine " + imagineDTO.getPrompt());
-		String key = task.getId().concat("-").concat(imagineDTO.getOpenid());
+		ObjectMapper objectMapper = new ObjectMapper();
+		String id = objectMapper.readValue(task.getId(), String.class);
+		String key = id.concat("-").concat(imagineDTO.getOpenid());
 		redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 		return this.taskService.submitImagine(task, dataUrl);
 	}
