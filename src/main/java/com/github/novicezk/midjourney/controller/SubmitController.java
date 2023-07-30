@@ -91,9 +91,7 @@ public class SubmitController {
 		task.setPromptEn(promptEn);
 		task.setFinalPrompt("[" + task.getId() + "] " + promptEn);
 		task.setDescription("/imagine " + imagineDTO.getPrompt());
-		ObjectMapper objectMapper = new ObjectMapper();
-		String id = objectMapper.readValue(task.getId(), String.class);
-		String key = id.concat("-").concat(imagineDTO.getOpenid());
+		String key = task.getId().split("-")[1].concat("-").concat(imagineDTO.getOpenid());
 		redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 		return this.taskService.submitImagine(task, dataUrl);
 	}
@@ -154,11 +152,11 @@ public class SubmitController {
 		task.setRelatedTaskId(ConvertUtils.findTaskIdByFinalPrompt(targetTask.getFinalPrompt()));
 		task.setDescription(description);
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
-			String key = task.getId().concat("-").concat(changeDTO.getOpenid());
+			String key = task.getId().split("-")[1].concat("-").concat(changeDTO.getOpenid());
 			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 			return this.taskService.submitUpscale(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
-			String key = task.getId().concat("-").concat(changeDTO.getOpenid());
+			String key = task.getId().split("-")[1].concat("-").concat(changeDTO.getOpenid());
 			redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 			return this.taskService.submitVariation(task, targetTask.getMessageId(), targetTask.getMessageHash(), changeDTO.getIndex());
 		} else {
