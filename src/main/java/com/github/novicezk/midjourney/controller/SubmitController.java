@@ -28,6 +28,8 @@ import eu.maxschuster.dataurl.IDataUrlSerializer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +39,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Api(tags = "任务提交")
 @RestController
@@ -47,6 +50,9 @@ public class SubmitController {
 	private final TaskStoreService taskStoreService;
 	private final ProxyProperties properties;
 	private final TaskService taskService;
+
+	@Autowired
+	RedisTemplate redisTemplate;
 
 	@ApiOperation(value = "提交Imagine任务")
 	@PostMapping("/imagine")
@@ -83,6 +89,8 @@ public class SubmitController {
 		task.setPromptEn(promptEn);
 		task.setFinalPrompt("[" + task.getId() + "] " + promptEn);
 		task.setDescription("/imagine " + imagineDTO.getPrompt());
+		String key = imagineDTO.getTaskid().concat("-").concat(imagineDTO.getOpenid());
+		redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 		return this.taskService.submitImagine(task, dataUrl);
 	}
 
