@@ -19,6 +19,4 @@ public class SubmitImagineDTO extends BaseSubmitDTO {
 
 	private String openid;
 
-	private String taskid;
-
 }

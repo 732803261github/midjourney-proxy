@@ -89,7 +89,7 @@ public class SubmitController {
 		task.setPromptEn(promptEn);
 		task.setFinalPrompt("[" + task.getId() + "] " + promptEn);
 		task.setDescription("/imagine " + imagineDTO.getPrompt());
-		String key = imagineDTO.getTaskid().concat("-").concat(imagineDTO.getOpenid());
+		String key = task.getId().concat("-").concat(imagineDTO.getOpenid());
 		redisTemplate.opsForValue().set(key,"",30, TimeUnit.DAYS);
 		return this.taskService.submitImagine(task, dataUrl);
 	}
