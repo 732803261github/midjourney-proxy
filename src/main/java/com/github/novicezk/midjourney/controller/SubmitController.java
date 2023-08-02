@@ -164,10 +164,7 @@ public class SubmitController {
 
 	public  void openidBindTask(Task task,String openid){
 		String key = task.getId().concat("-").concat(openid);
-		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-		redisTemplate.setKeySerializer(jackson2JsonRedisSerializer);
-		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-		redisTemplate.opsForValue().set(key,"",30,TimeUnit.DAYS);
+		redisTemplate.opsForValue().set(key,task.getPrompt(),30,TimeUnit.DAYS);
 	}
 
 	@ApiOperation(value = "提交Describe任务")
