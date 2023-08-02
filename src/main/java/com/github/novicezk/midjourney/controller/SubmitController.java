@@ -163,7 +163,8 @@ public class SubmitController {
 	}
 
 	public  void openidBindTask(Task task,String openid){
-		String key = task.getId().concat("-").concat(openid);
+		String id = task.getId().split("-")[1];
+		String key = id.concat("-").concat(openid);
 		redisTemplate.opsForValue().set(key,task.getPrompt(),30,TimeUnit.DAYS);
 	}
 
