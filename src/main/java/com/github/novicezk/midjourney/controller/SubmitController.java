@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,8 @@ public class SubmitController {
 
 	@Autowired
 	RedisTemplate redisTemplate;
+	@Autowired
+	StringRedisTemplate stringRedisTemplate;
 
 	@ApiOperation(value = "提交Imagine任务")
 	@PostMapping("/imagine")
@@ -163,9 +166,8 @@ public class SubmitController {
 	}
 
 	public  void openidBindTask(Task task,String openid){
-		String id = task.getId().split("-")[1];
-		String key = id.concat("-").concat(openid);
-		redisTemplate.opsForValue().set(key,task.getPrompt(),30,TimeUnit.DAYS);
+		String key = task.getId().concat("-").concat(openid);
+		stringRedisTemplate.opsForValue().set(key,task.getPrompt(),30,TimeUnit.DAYS);
 	}
 
 	@ApiOperation(value = "提交Describe任务")
