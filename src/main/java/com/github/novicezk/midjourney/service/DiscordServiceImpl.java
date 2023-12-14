@@ -199,6 +199,7 @@ public class DiscordServiceImpl implements DiscordService {
 	private Message<Void> postJsonAndCheckStatus(String paramsStr) {
 		try {
 			ResponseEntity<String> responseEntity = postJson(paramsStr);
+			log.info("发送discord服务器，response:{}",responseEntity);
 			if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
 				return Message.success();
 			}
