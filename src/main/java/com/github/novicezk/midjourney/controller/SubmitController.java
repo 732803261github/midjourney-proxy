@@ -100,7 +100,6 @@ public class SubmitController {
 		}
 		task.setPromptEn(promptEn);
 		task.setDescription("/imagine " + prompt);
-		openidBindTask(task,imagineDTO.getOpenid());
 		return this.taskService.submitImagine(task, dataUrls);
 	}
 
@@ -165,7 +164,6 @@ public class SubmitController {
 		int messageFlags = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_FLAGS);
 		String messageId = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_ID);
 		String messageHash = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_HASH);
-		openidBindTask(task,changeDTO.getOpenid());
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
 			return this.taskService.submitUpscale(task, messageId, messageHash, changeDTO.getIndex(), messageFlags);
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
@@ -173,11 +171,6 @@ public class SubmitController {
 		} else {
 			return this.taskService.submitReroll(task, messageId, messageHash, messageFlags);
 		}
-	}
-
-	public  void openidBindTask(Task task,String openid){
-		String key = task.getId().concat("-").concat(openid);
-		stringRedisTemplate.opsForValue().set(key,task.getPrompt(),30, TimeUnit.DAYS);
 	}
 
 	@ApiOperation(value = "提交Describe任务")
