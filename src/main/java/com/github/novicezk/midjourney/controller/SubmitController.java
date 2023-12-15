@@ -34,6 +34,7 @@ import eu.maxschuster.dataurl.IDataUrlSerializer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -52,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Api(tags = "任务提交")
 @RestController
 @RequestMapping("/submit")
@@ -70,6 +72,7 @@ public class SubmitController {
 	@ApiOperation(value = "提交Imagine任务")
 	@PostMapping("/imagine")
 	public SubmitResultVO imagine(@RequestBody SubmitImagineDTO imagineDTO) throws JsonProcessingException {
+		log.info("提交Imagine任务");
 		String prompt = imagineDTO.getPrompt();
 		if (CharSequenceUtil.isBlank(prompt)) {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "prompt不能为空");
