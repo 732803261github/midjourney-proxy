@@ -201,7 +201,7 @@ public class DiscordServiceImpl implements DiscordService {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity requestEntity = new HttpEntity(map,headers);
 		ResponseEntity<String> response = restTemplate.exchange(
-				"http://ai-assistant.com.cn:8080/mid/gen",
+				"http://ai-assistant.com.cn:8081/mid/gen",
 				HttpMethod.POST,
 				requestEntity,
 				String.class
