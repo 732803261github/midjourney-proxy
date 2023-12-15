@@ -41,7 +41,8 @@ public class DiscordServiceImpl implements DiscordService {
 		this.restTemplate = restTemplate;
 		this.discordHelper = SpringContextHolder.getApplicationContext().getBean(DiscordHelper.class);
 		this.paramsMap = paramsMap;
-		String discordServer = this.discordHelper.getServer();
+//		String discordServer = this.discordHelper.getServer();
+		String discordServer = "https://discord.com";
 		this.discordInteractionUrl = discordServer + "/api/v9/interactions";
 		this.discordAttachmentUrl = discordServer + "/api/v9/channels/" + account.getChannelId() + "/attachments";
 		this.discordMessageUrl = discordServer + "/api/v9/channels/" + account.getChannelId() + "/messages";
