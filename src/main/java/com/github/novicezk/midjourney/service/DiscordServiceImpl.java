@@ -39,8 +39,7 @@ public class DiscordServiceImpl implements DiscordService {
 		this.restTemplate = restTemplate;
 		this.discordHelper = SpringContextHolder.getApplicationContext().getBean(DiscordHelper.class);
 		this.paramsMap = paramsMap;
-//		String discordServer = this.discordHelper.getServer();
-		String discordServer = "https://discord.com";
+		String discordServer = this.discordHelper.getServer();
 		this.discordInteractionUrl = discordServer + "/api/v9/interactions";
 		this.discordAttachmentUrl = discordServer + "/api/v9/channels/" + account.getChannelId() + "/attachments";
 		this.discordMessageUrl = discordServer + "/api/v9/channels/" + account.getChannelId() + "/messages";
@@ -211,10 +210,10 @@ public class DiscordServiceImpl implements DiscordService {
 
 	private Message<Void> postJsonAndCheckStatus(String paramsStr) {
 		try {
-//			ResponseEntity<String> responseEntity = postJson(paramsStr);
+			ResponseEntity<String> responseEntity = postJson(paramsStr);
 			//通过python请求
-			log.info("通过python请求-/mid/gen");
-			ResponseEntity<String> responseEntity = genImg(paramsStr,"image");
+//			log.info("通过python请求-/mid/gen");
+//			ResponseEntity<String> responseEntity = genImg(paramsStr,"image");
 			if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
 				return Message.success();
 			}
