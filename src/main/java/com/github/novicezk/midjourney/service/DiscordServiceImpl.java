@@ -2,6 +2,7 @@ package com.github.novicezk.midjourney.service;
 
 
 import cn.hutool.core.text.CharSequenceUtil;
+import com.alibaba.fastjson.JSON;
 import com.github.novicezk.midjourney.ReturnCode;
 import com.github.novicezk.midjourney.domain.DiscordAccount;
 import com.github.novicezk.midjourney.enums.BlendDimensions;
@@ -12,16 +13,13 @@ import eu.maxschuster.dataurl.DataUrl;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class DiscordServiceImpl implements DiscordService {
@@ -194,13 +192,27 @@ public class DiscordServiceImpl implements DiscordService {
 		headers.set("Authorization", this.account.getUserToken());
 		headers.set("User-Agent", this.account.getUserAgent());
 		HttpEntity<String> httpEntity = new HttpEntity<>(paramsStr, headers);
-		return this.restTemplate.postForEntity(url, httpEntity, String.class);
+		return genImg(paramsStr,"image");
+//		return this.restTemplate.postForEntity(url, httpEntity, String.class);
+	}
+
+	public ResponseEntity<String> genImg(String paramsStr,String type){
+		Map<String,Object> map = new HashMap<>();
+		map.put("prompt", paramsStr);
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity requestEntity = new HttpEntity(map,headers);
+		ResponseEntity<String> response = restTemplate.exchange(
+				"http://ai-assistant.com.cn:8080/mid/gen",
+				HttpMethod.POST,
+				requestEntity,
+				String.class
+		);
+		return response;
 	}
 
 	private Message<Void> postJsonAndCheckStatus(String paramsStr) {
 		try {
 			ResponseEntity<String> responseEntity = postJson(paramsStr);
-			log.info("发送discord服务器，response:{}",responseEntity);
 			if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
 				return Message.success();
 			}
