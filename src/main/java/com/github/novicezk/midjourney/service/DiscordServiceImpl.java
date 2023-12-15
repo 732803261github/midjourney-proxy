@@ -192,8 +192,7 @@ public class DiscordServiceImpl implements DiscordService {
 		headers.set("Authorization", this.account.getUserToken());
 		headers.set("User-Agent", this.account.getUserAgent());
 		HttpEntity<String> httpEntity = new HttpEntity<>(paramsStr, headers);
-		return genImg(paramsStr,"image");
-//		return this.restTemplate.postForEntity(url, httpEntity, String.class);
+		return this.restTemplate.postForEntity(url, httpEntity, String.class);
 	}
 
 	public ResponseEntity<String> genImg(String paramsStr,String type){
@@ -212,7 +211,10 @@ public class DiscordServiceImpl implements DiscordService {
 
 	private Message<Void> postJsonAndCheckStatus(String paramsStr) {
 		try {
-			ResponseEntity<String> responseEntity = postJson(paramsStr);
+//			ResponseEntity<String> responseEntity = postJson(paramsStr);
+			//通过python请求
+			log.info("通过python请求-/mid/gen");
+			ResponseEntity<String> responseEntity = genImg(paramsStr,"image");
 			if (responseEntity.getStatusCode() == HttpStatus.NO_CONTENT) {
 				return Message.success();
 			}
