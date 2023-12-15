@@ -100,6 +100,7 @@ public class SubmitController {
 		}
 		task.setPromptEn(promptEn);
 		task.setDescription("/imagine " + prompt);
+		openidBindTask(task,imagineDTO.getOpenid());
 		return this.taskService.submitImagine(task, dataUrls);
 	}
 
@@ -164,6 +165,7 @@ public class SubmitController {
 		int messageFlags = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_FLAGS);
 		String messageId = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_ID);
 		String messageHash = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_HASH);
+		openidBindTask(task,changeDTO.getOpenid());
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
 			return this.taskService.submitUpscale(task, messageId, messageHash, changeDTO.getIndex(), messageFlags);
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
