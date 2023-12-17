@@ -1,14 +1,14 @@
 server:
   tomcat:
-    max-http-form-post-size: -1
+    max-http-form-post-size: 100MB
   port: 8080
   servlet:
     context-path: /mj
 spring:
   servlet:
     multipart:
-      max-file-size: 50
-      max-request-size: 50
+      max-file-size: 100MB
+      max-request-size: 100MB
 logging:
   level:
     ROOT: info
