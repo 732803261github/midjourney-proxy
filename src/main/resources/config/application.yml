@@ -1,6 +1,6 @@
 server:
   tomcat:
-    max-http-form-post-size: 20
+    max-http-form-post-size: -1
   port: 8080
   servlet:
     context-path: /mj
